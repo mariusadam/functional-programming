@@ -15,7 +15,6 @@ internal_sum([], [], 0, Acc, Acc):-!.
 internal_sum([], [], 1, Acc, [1 | Acc]):-!.
 
 internal_sum([H | T], [], Tenth, Acc, Result):-
-	!,
 	HF is H + Tenth,
 	Tenth2 is HF div 10,
 	Digit is HF mod 10,
@@ -34,3 +33,17 @@ sum(L1, L2, Result):-
 	reverse(L1, L1F),
 	reverse(L2, L2F),
 	internal_sum(L1F, L2F, 0, [],Result).
+
+internal_sublists_sum([], Acc, Acc).
+
+internal_sublists_sum([H | T], Acc, Result):-
+	is_list(H),
+	sum(H, Acc, Acc2),
+	internal_sublists_sum(T, Acc2, Result).
+
+internal_sublists_sum([H | T], Acc, Result):-
+	not(is_list(H)),
+	internal_sublists_sum(T, Acc, Result).
+
+sublists_sum(L, Result):-
+	internal_sublists_sum(L, [], Result).
